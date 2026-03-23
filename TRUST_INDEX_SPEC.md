@@ -33,7 +33,7 @@ graph TD
 Terms defined in the ANS architecture document (DESIGN.md) are used here with the same meaning: RA, TL, AIM, AHP, ANSName, FQDN, KMS, Identity Certificate, Server Certificate, Protocol Card, Registration Metadata, ANS Agent Card. This table defines terms specific to the Trust Index.
 
 | Term | Definition |
-|------|-----------|
+| ------ | ----------- |
 | **Identity Grade** | A classification (Basic, Verified, Premium) describing how thoroughly the agent's operator was vetted. See Section 5. |
 | **Principal Binding** | A link between an agent and the real-world entity that controls it, expressed as a DID, Legal Entity Identifier, or biometric hash. |
 | **Trust Index (TI)** | A service that crawls Transparency Logs, evaluates agent metadata, and publishes Trust Vectors. |
@@ -105,7 +105,7 @@ Three areas will require attention as the ecosystem grows beyond a single RA and
 Features from companion proposals that are not yet part of the core ANS architecture are marked with status labels:
 
 | Marker | Meaning | Source |
-|--------|---------|--------|
+| -------- | --------- | -------- |
 | `[PROPOSED]` | Designed, not yet implemented | IETF SCITT migration, including COSE receipts and Status Tokens |
 | `[DRAFT]` | Specification drafted, pending external publication | HCS-27 standard (draft in this repository) |
 | `[DRAFT]` | Specification published as draft | HCS-14 standard (published draft) |
@@ -189,7 +189,7 @@ The Trust Vector has this JSON representation:
 Each dimension is scored independently. A high score in one dimension does not compensate for a low score in another. An agent scoring 95 on identity and 0 on solvency has strong accountability but no financial backing; a stock trading agent should reject it, while a news reader might accept it.
 
 | Dimension | Travel Agent | Trading Bot |
-|-----------|-------------|-------------|
+| ----------- | ------------- | ------------- |
 | Integrity | 72 | 65 |
 | Identity | 90 | 55 |
 | Solvency | 15 | 85 |
@@ -208,7 +208,7 @@ Additional signal categories (such as sustainability) MAY be returned as supplem
 The Trust Evaluation API response includes a `recommendedProfile` field classifying agents into operating categories:
 
 | Profile | Conditions | Suitable for |
-|---------|------------|--------------|
+| --------- | ------------ | -------------- |
 | `READ_ONLY` | Low solvency or identity | Information queries, read-only data access |
 | `TRANSACTIONAL` | Moderate scores across all dimensions | Small purchases, reversible transactions |
 | `FIDUCIARY` | High identity and solvency | Financial delegation, legal contracts |
@@ -278,7 +278,7 @@ The normative schema is in Appendix A. Where any inline description conflicts wi
 The top-level Trust Manifest object requires four sections:
 
 | Field | Required | Description |
-|-------|----------|-------------|
+| ------- | ---------- | ------------- |
 | `manifestVersion` | MUST | Schema version string (e.g., "1.0.0") |
 | `agentIdentity` | MUST | Agent identification and principal binding |
 | `attestationLevel` | MUST | Verification tier and certificate type |
@@ -336,7 +336,7 @@ A conforming TI MUST be able to verify the formats described below.
 The agent's certificate chain is the primary identity signal. A TI MUST verify the certificate against trusted Certificate Authorities and MUST classify it:
 
 | Certificate | What it proves | Scoring guidance |
-|------------|----------------|------------------|
+| ------------ | ---------------- | ------------------ |
 | DV (Domain Validation) | Someone controls the domain | Minimal identity signal |
 | OV (Organization Validation) | A verified business owns the domain | Moderate identity signal |
 | EV (Extended Validation) | A legal entity with verified physical address | Strong identity signal |
@@ -416,7 +416,7 @@ When the SCITT migration completes (RFC 9943), each agent registration will prod
 A TI SHOULD score receipt presence as an integrity signal:
 
 | Receipt delivery | Integrity signal strength |
-|-----------------|--------------------------|
+| ----------------- | -------------------------- |
 | Stapled (embedded in ANS Agent Card COSE unprotected header) | Strongest: offline verification, no RA connectivity required |
 | Sidecar (fetched from `_ans-badge` endpoint) | Strong: same cryptographic proof, requires network call |
 | Absent | Weakest: TI must crawl TL and compare hashes directly |
@@ -428,7 +428,7 @@ A **Status Token** `[PROPOSED]` is a short-lived RA-signed assertion of the agen
 A conforming TI MUST implement verification for each credential format:
 
 | Format | Verification procedure |
-|--------|----------------------|
+| -------- | ---------------------- |
 | X.509 | Validate certificate chain to trusted root. Check revocation (CRL or OCSP). Classify as DV/OV/EV. Verify CAA alignment. |
 | W3C VC | Resolve issuer DID. Retrieve public key. Verify signature. Check expiration. Validate `@context` and `type`. |
 | ZK proof | Verify mathematical proof against the claimed statement. Check `blockHeight` against `maxBlockAge`. Validate `chainId`. |
@@ -443,7 +443,7 @@ A conforming TI MUST implement verification for each credential format:
 Identity grade classifies how thoroughly the agent's operator was vetted. Schema version 1.0 defines three grades. The governance body MAY define additional grades in future versions.
 
 | Identity Grade | Primary path | Alternative paths |
-|----------------|-------------|-------------------|
+| ---------------- | ------------- | ------------------- |
 | Premium | EV certificate | (OV + vLEI) OR (OV + VMC) OR (DV + vLEI + VMC) |
 | Verified | OV certificate | (DV + vLEI) OR (DV + code signing certificate + VMC) |
 | Basic | DV certificate | Any valid certificate |
@@ -461,7 +461,7 @@ Each alternative path MUST include at least one third-party attestation. Self-as
 Every agent has a `principalBinding`: a link to the real-world entity that controls it. The binding type determines how difficult it is for a bad actor to shed negative history by creating a new identity.
 
 | Binding type | What it binds | Escape difficulty |
-|-------------|---------------|-------------------|
+| ------------- | --------------- | ------------------- |
 | `DID_WEB` | Domain control | Easy (register new domain) |
 | `LEI` | Legal entity (via vLEI, ISO 17442) | Medium (requires forming a new corporation) |
 | `BIOMETRIC_HASH` | Physical person | Hard (requires a new person) |
@@ -538,7 +538,7 @@ The Trust Manifest captures these signals in the `externalTrustAnchors` array:
 A TI MUST verify that anchor domains match the agent's registered domain. A TI SHOULD weight anchors by type:
 
 | Anchor type | Signal strength | Condition |
-|------------|----------------|-----------|
+| ------------ | ---------------- | ----------- |
 | VMC | Strong | CA verified business + trademark ownership |
 | CMC (Common Mark Certificate) | Moderate | CA verified business ownership |
 | Self-asserted BIMI | Weak | Domain owner claims this logo, no CA verification |
@@ -552,7 +552,7 @@ A TI MUST verify that anchor domains match the agent's registered domain. A TI S
 A tier describes what the *client* verified, not a property the RA assigned. Two Gold-verified agents can have different integrity scores; the tier label stays the same, the Trust Vector captures the difference.
 
 | Tier | Checks performed | What it adds |
-|------|-----------------|-------------|
+| ------ | ----------------- | ------------- |
 | Bronze | Certificate chain validation against trusted CAs | Confirms domain control. Every conforming verifier MUST implement this. |
 | Silver | Bronze + DANE TLSA record verified through full DNSSEC chain | A rogue CA alone cannot forge the TLSA record. TLSA SHOULD use usage 3 (DANE-EE). |
 | Gold | Silver + TL inclusion proof confirms sealed registration | The inclusion proof confirms the registration was sealed into the log. A tampered or deleted entry breaks the proof. |
@@ -639,7 +639,7 @@ The agent publishes its challenge endpoint in its ANS Agent Card at `trustManife
 #### 7.4.2 Failure modes
 
 | Failure | TI behavior | Risk factor |
-|---------|------------|-------------|
+| --------- | ------------ | ------------- |
 | Agent does not respond before deadline | Return cached evaluation | `SOLVENCY_FRESH_CHALLENGE_TIMEOUT` |
 | Agent returns invalid proof (math fails) | Return cached evaluation | `SOLVENCY_FRESH_CHALLENGE_INVALID_PROOF` |
 | Agent returns proof with wrong nonce | Return cached evaluation | `SOLVENCY_FRESH_CHALLENGE_NONCE_MISMATCH` |
@@ -1175,7 +1175,7 @@ graph LR
 When a client includes `interactionContext` in its evaluation request, it declares how the evaluated agent authenticated for the current interaction:
 
 | Auth method | Strength | Description |
-|------------|----------|-------------|
+| ------------ | ---------- | ------------- |
 | `MTLS_PRICC` | 6 (highest) | Mutual TLS with PriCC chain binding |
 | `MTLS_PUBSC` | 5 | Mutual TLS with public-CA server certificate |
 | `JWT_CERT` | 4 | JWT signed by the agent's Identity Certificate |
@@ -1233,7 +1233,7 @@ The `interactionContext` request parameter:
 ```
 
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `authMethod` | string | One of the auth methods from Section C.1 |
 | `transportSecurity` | string | TLS version or `PLAINTEXT` |
 | `clientVerified` | boolean | Whether the client presented a certificate |
@@ -1258,7 +1258,7 @@ AdjustedSignal = CachedSignal * max(0, 1 - HoursSinceCache / 24)
 ```
 
 | Signal type | Recommended lambda | Half-life | Rationale |
-|------------|-------------------|-----------|-----------|
+| ------------ | ------------------- | ----------- | ----------- |
 | Disputes | 0.001 | ~693 days | Bad behavior should be remembered for years |
 | Peer endorsements | 0.002 | ~347 days | Relationships change slowly |
 | User ratings | 0.005 | ~139 days | Recent experience matters more |
