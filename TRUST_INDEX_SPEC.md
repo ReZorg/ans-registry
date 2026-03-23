@@ -107,8 +107,9 @@ Features from companion proposals that are not yet part of the core ANS architec
 | Marker | Meaning | Source |
 | -------- | --------- | -------- |
 | `[PROPOSED]` | Designed, not yet implemented | IETF SCITT migration, including COSE receipts and Status Tokens |
-| `[DRAFT]` | Specification drafted, pending external publication | HCS-27 standard (draft in this repository) |
-| `[DRAFT]` | Specification published as draft | HCS-14 standard (published draft) |
+| `[PENDING]` | Blocked on a dependency outside this specification | Cross-channel hash consistency, SVCB `cap-sha256` comparison |
+| `[DRAFT:HCS-27]` | Specification drafted, pending external publication | HCS-27 Merkle Tree Checkpoint standard |
+| `[DRAFT:HCS-14]` | External specification published as draft | HCS-14 Universal Agent ID standard |
 
 ---
 
@@ -369,7 +370,7 @@ Example evaluation response as a VC:
       "solvency": 12, "behavior": 78, "safety": 91
     },
     "recommendedProfile": "READ_ONLY",
-    "evaluatedAt": "2026-01-29T12:00:00Z"
+    "evaluationTime": "2026-01-29T12:00:00Z"
   },
   "proof": {
     "type": "DataIntegrityProof",
@@ -389,7 +390,7 @@ Third parties verify the signature against the TI's public key without crawling 
 {
   "solvencyProof": {
     "type": "ZK_SNARK",
-    "threshold_usd": 10000,
+    "minimumBalance": "10000",
     "asset": "USDC",
     "chainId": 1,
     "blockHeight": 19234567,
@@ -838,7 +839,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
                   }
                 },
                 "aggregateProof": { "type": "string" },
-                "chainedAt": { "format": "date-time" }
+                "chainedAt": { "type": "string", "format": "date-time" }
               }
             }
           }
@@ -861,10 +862,10 @@ This is the canonical schema. Where inline descriptions in the specification bod
       "type": "object",
       "required": ["registered", "lastVerified"],
       "properties": {
-        "registered": { "format": "date-time" },
-        "lastVerified": { "format": "date-time" },
-        "certExpiry": { "format": "date-time" },
-        "lastCodeChange": { "format": "date-time" }
+        "registered": { "type": "string", "format": "date-time" },
+        "lastVerified": { "type": "string", "format": "date-time" },
+        "certExpiry": { "type": "string", "format": "date-time" },
+        "lastCodeChange": { "type": "string", "format": "date-time" }
       }
     },
     "integritySignals": {
@@ -929,7 +930,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
               "logoHash": { "type": "string" },
               "issuer": { "type": "string" },
               "subjectHash": { "type": "string" },
-              "verifiedAt": { "format": "date-time" }
+              "verifiedAt": { "type": "string", "format": "date-time" }
             }
           }
         }
@@ -966,7 +967,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
             "provider": { "type": "string" },
             "coverageAmount": { "type": "string" },
             "policyHash": { "type": "string" },
-            "expiresAt": { "format": "date-time" }
+            "expiresAt": { "type": "string", "format": "date-time" }
           }
         },
         "escrowHistory": {
@@ -1041,7 +1042,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
             "version": { "type": "string" },
             "auditorDid": { "type": "string" },
             "reportHash": { "type": "string" },
-            "passedAt": { "format": "date-time" }
+            "passedAt": { "type": "string", "format": "date-time" }
           }
         },
         "enclaveAttestation": {
@@ -1074,7 +1075,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
           "properties": {
             "auditor": { "type": "string" },
             "reportHash": { "type": "string" },
-            "auditedAt": { "format": "date-time" }
+            "auditedAt": { "type": "string", "format": "date-time" }
           }
         },
         "complianceCertifications": {
@@ -1085,7 +1086,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
               "standard": { "enum": ["SOC2_TYPE1", "SOC2_TYPE2", "HIPAA", "ISO27001", "GDPR", "PCI_DSS"] },
               "issuer": { "type": "string" },
               "reportHash": { "type": "string" },
-              "validUntil": { "format": "date-time" }
+              "validUntil": { "type": "string", "format": "date-time" }
             }
           }
         }
@@ -1107,7 +1108,7 @@ This is the canonical schema. Where inline descriptions in the specification bod
   "required": ["agentId", "evaluationTime", "trustVector", "recommendedProfile", "riskFactors"],
   "properties": {
     "agentId": { "type": "string" },
-    "evaluationTime": { "format": "date-time" },
+    "evaluationTime": { "type": "string", "format": "date-time" },
     "trustVector": {
       "type": "object",
       "required": ["integrity", "identity", "solvency", "behavior", "safety"],
