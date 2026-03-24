@@ -367,13 +367,14 @@ Example evaluation response as a VC:
   "type": ["VerifiableCredential", "TrustEvaluation"],
   "issuer": "did:web:trust-index.example.com",
   "credentialSubject": {
-    "id": "did:web:agent.example.com",
+    "agentId": "ans://v1.0.0.invoicing.supplier.example.com",
+    "evaluationTime": "2026-01-29T12:00:00Z",
     "trustVector": {
       "integrity": 82, "identity": 95,
       "solvency": 12, "behavior": 78, "safety": 91
     },
     "recommendedProfile": "READ_ONLY",
-    "evaluationTime": "2026-01-29T12:00:00Z"
+    "riskFactors": ["SOLVENCY_PROOF_STALE"]
   },
   "proof": {
     "type": "DataIntegrityProof",
