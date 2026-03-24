@@ -75,7 +75,7 @@ Each topology runs the same protocol. An agent registered in a public ANS presen
 
 ### 1.7 Entity scope
 
-The term "agent" appears throughout this document because autonomous AI agents are the primary registrant. The architecture is not limited to agents. Any software entity that needs a verifiable, domain-anchored identity can register: an agentic browser acting on behalf of a user, a web crawler with declared behavioral policies, a consuming service that presents credentials when calling an agent. The registration payload, certificate model, and TL semantics are identical regardless of entity type. What differs is the Agent Card content and the endpoints array. A consuming entity may register an Identity Certificate for mTLS without serving an Agent Card. The Trust Index scores whatever signals are available; a missing card reduces the integrity dimension but does not block registration.
+The term "agent" appears throughout this document because autonomous AI agents are the primary registrant. The architecture is not limited to agents. Any software entity that needs a verifiable, domain-anchored identity can register: an agentic browser acting on behalf of a user, a web crawler with declared behavioral policies, a consuming service that presents credentials when calling an agent. The registration payload, certificate model, and TL semantics are identical regardless of entity type. What differs is the Agent Card content and the endpoints array. A consuming entity may register an Identity Certificate for mTLS without serving an Agent Card. A [Trust Index](TRUST_INDEX_SPEC.md) scores whatever signals are available; a missing card reduces the integrity dimension but does not block registration.
 
 ## 2.0 Architectural views
 
@@ -245,11 +245,11 @@ The RA answers one question: "Who are you?" It verifies and seals the agent's id
 
 **Layer 3: Behavioral reputation (real-time scoring).** External services continuously score agent behavior: transaction success rates, protocol compliance, community flags. These scores update in seconds, not months.
 
-These three layers describe *who provides trust data*. The companion Trust Index Architecture describes *what trust data is evaluated*, organizing signals into five dimensions (integrity, identity, solvency, behavior, safety) and computing a numeric trust score. The Trust Index consumes data from all three layers. Layer 1 feeds the integrity and identity dimensions. Layers 2 and 3 feed solvency, behavior, and safety.
+These three layers describe *who provides trust data*. The companion [Trust Index Open Specification](TRUST_INDEX_SPEC.md) describes *what trust data is evaluated*, organizing signals into five dimensions (integrity, identity, solvency, behavior, safety) and computing a numeric trust score. The Trust Index consumes data from all three layers. Layer 1 feeds the integrity and identity dimensions. Layers 2 and 3 feed solvency, behavior, and safety.
 
 The data flows mechanically through two paths. **Registration-time claims** enter the system via the Agent Card's `verifiableClaims` array (§3.2.2). The AHP includes whatever attestation references it has at registration. The RA hashes the full Agent Card, claims included, and seals that hash into the Transparency Log. The event payload's `meta` block includes the claim types. Discovery Services and Trust Index crawlers can filter by attestation type without fetching the full Agent Card. **Post-registration signals** (behavioral scores, dispute rates, real-time solvency proofs) never touch the Agent Card or the RA. The Trust Index collects these independently and includes them in its own scoring output. The RA's sealed hash is a snapshot of what the agent claimed at registration. The Trust Index's evaluation is a live assessment of what the agent is doing now.
 
-*The trust framework diagram lives in TRUST_INDEX_ARCHITECTURE.md (Figure 1: Five Pillars of Trust).*
+*Section 2 (Trust Model) of the [Trust Index Open Specification](TRUST_INDEX_SPEC.md) defines the five signal categories, Trust Vector, and related figures.*
 
 **3.4.1 Discovery service:**
 
